@@ -1,0 +1,12 @@
+UP
+col~id~INTEGER PRIMARY KEY NOT NULL
+col~name~TEXT NOT NULL
+col~height~REAL NOT NULL
+col~sex~TEXT NOT NULL
+col~DOBDay~INTEGER NOT NULL
+col~DOBMonth~INTEGER NOT NULL
+col~DOBYear~INTEGER NOT NULL
+col~metric~INTEGER NOT NULL
+timestamps
+DOWN
+drop-table

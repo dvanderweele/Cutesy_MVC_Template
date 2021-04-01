@@ -1,0 +1,8 @@
+UP
+col~id~INTEGER PRIMARY KEY NOT NULL
+col~pounds~REAL NOT NULL
+col~user_id~INTEGER NOT NULL
+timestamps
+foreign~user_id~user~id
+DOWN
+drop-table
