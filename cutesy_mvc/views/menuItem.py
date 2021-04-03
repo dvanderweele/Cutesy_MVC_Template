@@ -21,12 +21,10 @@ class MenuItem:
 		breadth = self.xmax - self.xmin
 		padl = (breadth - len(self.text)) // 2
 		if self.selected:
-			self.win.addch(self.ymin, self.xmin + padl - 1, '~')
-			self.win.addstr(self.ymin, self.xmin + padl, self.text, curses.A_UNDERLINE)
-			self.win.addch(self.ymin, self.xmin + padl + len(self.text), '~')
+			self.win.addstr(self.ymin, self.xmin + padl, self.text, curses.A_STANDOUT)
 		else:
 			self.win.addstr(self.ymin, self.xmin + padl, self.text)
 	def handleInput(self, key):
-		if key == curses.KEY_ENTER:
+		if key == ' ':
 			if self.text == 'Quit':
 				self.parent.parent.exit()

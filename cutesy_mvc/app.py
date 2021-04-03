@@ -24,25 +24,39 @@ def main(stdscr):
 	c = Client(lambda x: x)
 	stdscr.clear()
 	curses.curs_set(0)
-	h = 11
-	w = 36
+	curses.halfdelay(1)
+	dim = stdscr.getmaxyx()
+	h = dim[0]
+	w = dim[1]
 	tlx = 0
 	tly = 0
 	win = curses.newwin(h, w, tly, tlx)
 	win.box()
-	# writable x range = 1 - 34
-	# writable y range = 1 - 9
+	win.keypad(True)
 	global exit
 	global quit
+
+	l1 = "Apps by 'Veezy"
+	l2 = "Copyright 2021"
+	l3 = "Controls: WASD & Space"
+	win.addstr(dim[0] // 2 - 1, dim[1] // 2 - 7, l1)
+	win.addstr(dim[0] // 2, dim[1] // 2 - 7, l2)
+	win.addstr(dim[0] // 2 + 1, dim[1] // 2 - 11, l3)
+	win.refresh()
+	time.sleep(5)
+	curses.flash()
+	win.clear()
+	win.box()
 	r = Root(props={'win': win, 'off': exit, 'writable': {
 		'xmin': 1,
-		'xmax': 34,
+		'xmax': dim[1] - 1,
 		'ymin': 1,
-		'ymax': 9
+		'ymax': dim[0] - 1
 	}})
 	
+	curses.flushinp()
 	r.render()
-
+	win.refresh()
 	last = time.time()
 	delta = 0
 	while not(quit):
@@ -52,9 +66,7 @@ def main(stdscr):
 		r.render()
 		last = time.time()
 		win.refresh()
+		win.box()
 	del r
 
 	c.shutdown()
-
-	stdscr.getch()
-

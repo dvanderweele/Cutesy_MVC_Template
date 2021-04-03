@@ -17,7 +17,7 @@ class Root:
 					'win': self.win, 
 					'writable': {
 						'xmin': 1,
-						'xmax': 34,
+						'xmax': self.writable['xmax'],
 						'ymin': 1,
 						'ymax': 1,
 					}
@@ -30,9 +30,9 @@ class Root:
 					'win':self.win,
 					'writable': {
 						'xmin': 1,
-						'xmax': 34,
-						'ymin': 2,
-						'ymax': 9
+						'xmax': self.writable['xmax'],
+						'ymin': 3,
+						'ymax': self.writable['ymax'] - 1
 					}
 				})
 			]
@@ -46,14 +46,27 @@ class Root:
 	def render(self):
 		for c in self.children:
 			c[1].render() 
+		for ch in range(self.writable['xmin'], self.writable['xmax']):
+			self.win.addch(2, ch, '—')
+	def refocus(self, direction):
+		if direction  == 'down':
+			self.activeChildIdx = 1
+			self.children[1][1].focus()
+		elif direction == 'up':
+			self.activeChildIdx = 0
+			self.children[0][1].focus()
 	def handleInput(self):
-		self.win.nodelay(True)
-		key = self.win.getch()
-		if key != -1:
-			if self.activeChildIdx == 0:
-				self.children[0][1].handleInput(key)
-			else:
-				self.children[1][1].handleInput(key)
-		curses.flushinp()
+		try:
+			key = self.win.getch()
+			if key != -1:
+				key = curses.keyname(key).decode('ascii')
+				if self.activeChildIdx == 0:
+					self.children[0][1].handleInput(key)
+				else:
+					self.children[1][1].handleInput(key)
+			curses.flushinp()
+		except:
+			pass
 	def handleResponses(self):
 		self.client.receive()
+

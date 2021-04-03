@@ -1,6 +1,7 @@
 from ..helpers.model import Model
 
 class User(Model):
+	table = 'user'
 	relations = {
 		'necks': {
 			'type': 'hasMany',

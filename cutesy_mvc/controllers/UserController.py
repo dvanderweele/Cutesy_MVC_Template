@@ -4,17 +4,34 @@ from ..helpers.response import freshResponse
 from ..models.User import User
 
 class UserController:
+	@staticmethod
+	def page(request):
+		u = User().orderBy('name').offset(request['payload']['page'] * request['payload']['size']).limit(request['payload']['size']).get()
+		c = User().count()
+		r = freshResponse(request)
+		r['header']['request'] = request
+		if c > 0:
+			r['header']['code'] = 200
+		else:
+			r['header']['code'] = 404
+		r['payload']  = {
+			'users': u,
+			'total': c
+		}
+		return r
 
     @staticmethod
     def index(request):
         u = User().allModels()
-        r = freshResponse()
+        r = freshResponse(request)
         r['header']['request'] = request
         if len(u) > 0:
             r['header']['code'] = 200
         else:
             r['header']['code'] = 404
-        r['payload']['users'] = u
+        r['payload'] = {
+			'users': u
+		}
         return r
 
     @staticmethod
